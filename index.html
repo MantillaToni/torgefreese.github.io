@@ -4,12 +4,14 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Torge Freese</title>
-    <link rel="icon" type="image/svg+xml" href="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAxMDAgMTAwIj48Y2lyY2xlIGN4PSI1MCIgY3k9IjUwIiByPSI0NSIgZmlsbD0iI0ZGQTU0MCIvPjx0ZXh0IHg9IjUwIiB5PSI2NSIgZm9udC1mYW1pbHk9IidUaW1lcyBOZXcgUm9tYW4nLCBzZXJpZiIgZm9udC1zaXplPSI0MCIgZm9udC13ZWlnaHQ9ImJvbGQiIGZpbGw9IiM4OUNGRjAiIHRleHQtYW5jaG9yPSJtaWRkbGUiPlRGPC90ZXh0Pjwvc3ZnPg==">
+    <link rel="icon" type="image/svg+xml" href="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAxMDAgMTAwIj48Y2lyY2xlIGN4PSI1MCIgY3k9IjUwIiByPSI0NSIgZmlsbD0iIzAwOEU5NyIvPjx0ZXh0IHg9IjUwIiB5PSI2NSIgZm9udC1mYW1pbHk9IidUaW1lcyBOZXcgUm9tYW4nLCBzZXJpZiIgZm9udC1zaXplPSI0MCIgZm9udC13ZWlnaHQ9ImJvbGQiIGZpbGw9IiNGQzRDMDIiIHRleHQtYW5jaG9yPSJtaWRkbGUiPlRGPC90ZXh0Pjwvc3ZnPg==">
+    <!-- Markdown Parser -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/marked/4.0.2/marked.min.js"></script>
     <style>
         :root {
-            --primary-color: #2c3e50;
+            --primary-color: #008E97;
             --secondary-color: #ecf0f1;
-            --accent-color: #3498db;
+            --accent-color: #008E97;
             --text-color: #333;
         }
 
@@ -98,14 +100,31 @@
             margin-bottom: 1rem;
         }
 
+        .post-preview {
+            cursor: pointer;
+            transition: transform 0.2s;
+        }
+
+        .post-preview:hover {
+            transform: translateX(10px);
+        }
+
+        .read-more {
+            color: var(--accent-color);
+            text-decoration: none;
+            font-weight: 500;
+        }
+
+        .read-more:hover {
+            text-decoration: underline;
+        }
+
         footer {
             background-color: var(--primary-color);
             color: white;
             text-align: center;
             padding: 1rem;
-            position: fixed;
-            bottom: 0;
-            width: 100%;
+            margin-top: 4rem;
         }
 
         @media (max-width: 600px) {
@@ -121,12 +140,12 @@
     <header>
         <div class="logo-container">
             <svg class="logo" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100">
-                <circle cx="50" cy="50" r="45" fill="#FFA500"/>
+                <circle cx="50" cy="50" r="45" fill="#008E97"/>
                 <text x="50" y="65" 
                       font-family="'Times New Roman', serif" 
                       font-size="40" 
                       font-weight="bold" 
-                      fill="#89CFF0" 
+                      fill="#FC4C02" 
                       text-anchor="middle">
                     TF
                 </text>
@@ -138,30 +157,77 @@
 
     <nav>
         <ul>
-            <li><a href="#home">Start</a></li>
-            <li><a href="#blog">Blog</a></li>
-            <li><a href="#about">Über mich</a></li>
-            <li><a href="#contact">Kontakt</a></li>
+            <li><a href="index.html">Start</a></li>
+            <li><a href="#" onclick="loadPosts()">Blog</a></li>
+            <li><a href="about.html">Über mich</a></li>
+            <li><a href="contact.html">Kontakt</a></li>
         </ul>
     </nav>
 
-    <main>
-        <article>
-            <h2>Willkommen auf meiner Website</h2>
-            <div class="article-meta">Veröffentlicht am 1. Februar 2025</div>
-            <p>Herzlich willkommen auf meiner Website! Hier werde ich regelmäßig meine Gedanken, Erfahrungen und Geschichten mit euch teilen.</p>
-            <p>Diese Website dient als Plattform für meine Texte und Ideen. Schaut euch gerne um und kommt regelmäßig vorbei!</p>
-        </article>
-
-        <article>
-            <h2>Mein zweiter Beitrag</h2>
-            <div class="article-meta">Veröffentlicht am 31. Januar 2025</div>
-            <p>Hier kommt bald mein zweiter Beitrag. Ich freue mich darauf, mehr mit euch zu teilen.</p>
-        </article>
+    <main id="main-content">
+        <!-- Inhalt wird dynamisch geladen -->
     </main>
 
     <footer>
         <p>&copy; 2025 Torge Freese. Alle Rechte vorbehalten.</p>
     </footer>
+
+    <script>
+        // Liste der Blog-Posts
+        const posts = [
+            {
+                id: '2025-02-01-erster-post',
+                title: 'Willkommen auf meiner Website',
+                date: '1. Februar 2025',
+                excerpt: 'Herzlich willkommen auf meiner Website! Hier werde ich regelmäßig meine Gedanken, Erfahrungen und Geschichten mit euch teilen.'
+            }
+        ];
+
+        // Lade alle Posts für die Übersicht
+        async function loadPosts() {
+            const mainContent = document.getElementById('main-content');
+            mainContent.innerHTML = '<h2>Blog Posts</h2>';
+
+            for (const post of posts) {
+                const article = document.createElement('article');
+                article.className = 'post-preview';
+                article.innerHTML = `
+                    <h2>${post.title}</h2>
+                    <div class="article-meta">${post.date}</div>
+                    <p>${post.excerpt}</p>
+                    <a href="#" onclick="loadPost('${post.id}')" class="read-more">Weiterlesen...</a>
+                `;
+                mainContent.appendChild(article);
+            }
+        }
+
+        // Lade einen einzelnen Post
+        async function loadPost(id) {
+            try {
+                const response = await fetch(`posts/${id}.md`);
+                const markdown = await response.text();
+                const html = marked.parse(markdown);
+                
+                const post = posts.find(p => p.id === id);
+                const mainContent = document.getElementById('main-content');
+                
+                mainContent.innerHTML = `
+                    <article>
+                        <h2>${post.title}</h2>
+                        <div class="article-meta">${post.date}</div>
+                        ${html}
+                    </article>
+                    <p><a href="#" onclick="loadPosts()" class="read-more">← Zurück zur Übersicht</a></p>
+                `;
+            } catch (error) {
+                console.error('Error loading post:', error);
+            }
+        }
+
+        // Lade die Startseite beim ersten Besuch
+        document.addEventListener('DOMContentLoaded', () => {
+            loadPosts();
+        });
+    </script>
 </body>
 </html>
